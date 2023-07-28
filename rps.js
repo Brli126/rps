@@ -34,6 +34,8 @@ function playRound(playerSelection, computerSelection) {
 
 }
 
+
+// browser console version
 function play() {
     let playerScore = 0;
     let computerScore = 0;
@@ -58,4 +60,36 @@ function play() {
 
 }
 
-play();
+// UI version of the game
+const btns = document.querySelectorAll('button');
+const result = document.querySelector('.result');
+const playerscore = document.querySelector('.player-score');
+const computerscore = document.querySelector('.computer-score');
+btns.forEach(btn => btn.addEventListener('click', () => {
+    const choice = btn.textContent;
+    const message = playRound(choice, getComputerChoice());
+    result.textContent = message;
+    if (message.includes('You Win')) playerscore.textContent = Number(playerscore.textContent) + 1;
+    else if (message.includes('You Lose')) computerscore.textContent = Number(computerscore.textContent) + 1;
+    if (playerscore.textContent === '5' || computerscore.textContent === '5') {
+        if (playerscore.textContent === '5') result.textContent = 'Game Over! You Win!';
+        else result.textContent = 'Game Over! You Lose!';
+        btns.forEach(btn => btn.disabled = true);
+
+        // Restarting feature
+
+        // Create a restart button
+        const restartBtn = document.createElement('button'); 
+        restartBtn.textContent = 'Restart';
+        result.appendChild(restartBtn);
+        // Reset everything
+        restartBtn.addEventListener('click', () => {
+            result.removeChild(restartBtn);
+            playerscore.textContent = '0';
+            computerscore.textContent = '0';
+            result.textContent = 'Play rock paper sissors with computer, first to get 5 point wins.';
+            btns.forEach(btn => btn.disabled = false);
+        
+        })
+    }
+}));
